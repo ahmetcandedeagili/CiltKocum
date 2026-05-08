@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CiltKoçum</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+    <!-- Üst Menü (Navbar) -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-4">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">✨ CiltKoçum</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Analiz</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-muted" href="#">Hakkımızda</a>
+                        </li>
+                    </ul>
+                    <!-- İleride eklenecek Giriş/Kayıt butonları için yer tutucu -->
+                    <div class="d-flex">
+                        <a href="#" class="btn btn-outline-light btn-sm me-2">Giriş Yap</a>
+                        <a href="#" class="btn btn-light btn-sm">Kayıt Ol</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dinamik İçerik Alanı (Index.cshtml buraya gelir) -->
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Alt Bilgi ve Yasal Uyarı (Footer) -->
+    <footer class="border-top footer text-muted mt-auto py-3 bg-white">
+        <div class="container text-center small">
+            &copy; 2026 - CiltKoçum AI |
+            <span class="text-danger">Uyarı:</span> Bu platform tıbbi bir teşhis koymaz. Ciddi cilt hastalıkları için lütfen bir dermatoloğa başvurun.
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

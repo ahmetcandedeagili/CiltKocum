@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "AI Skincare Analysis";
+}
+
+<style>
+    .sephora-btn {
+        background-color: #000;
+        color: #fff;
+        border: 1px solid #000;
+        border-radius: 0; /* Keskin köşeler lüks hissi verir */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+
+        .sephora-btn:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+    .sephora-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 0;
+        transition: transform 0.2s ease;
+    }
+
+        .sephora-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+</style>
+
+<div class="container mt-5" style="max-width: 850px;">
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-dark" style="letter-spacing: 2px;">CİLT KOÇUM</h1>
+        <p class="text-muted mt-2" style="font-size: 1.1rem;">Describe your skin concern, and let our AI find the perfect ingredients for you.</p>
+    </div>
+
+    <div class="card sephora-card mb-5 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <form asp-controller="Home" asp-action="AskRoutine" method="post" onsubmit="showLoading()">
+                <div class="form-group mb-4">
+                    <label for="question" class="fw-bold mb-2 text-uppercase" style="font-size: 0.85rem;">Your Skin Profile</label>
+                    <textarea class="form-control rounded-0" id="question" name="question" rows="4"
+                              placeholder="e.g. My T-zone is very oily and I have blackheads on my nose..." required></textarea>
+                </div>
+                <button type="submit" id="submitBtn" class="btn sephora-btn w-100 fw-bold py-3 fs-6">
+                    Analyze My Skin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-dark rounded-0 border-0 bg-dark text-white text-center shadow-sm">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (ViewBag.AiAnswer != null)
+    {
+        <div class="mb-5">
+            <h4 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 1px;">AI Consultation Result</h4>
+
+            <div class="bg-light p-4 border-start border-dark border-4">
+                <h6 class="text-muted text-uppercase" style="font-size: 0.75rem;">Your Concern</h6>
+                <p class="fst-italic mb-4 text-dark">"@ViewBag.UserQuestion"</p>
+
+                <h6 class="fw-bold text-uppercase" style="font-size: 0.75rem;">Expert Advice</h6>
+                <p style="white-space: pre-wrap;" class="mb-3 text-dark">@ViewBag.AiAnswer</p>
+
+                @if (ViewBag.ActiveIngredient != null)
+                {
+                    <span class="badge bg-dark text-white rounded-0 px-3 py-2 mt-2">Recommended: @ViewBag.ActiveIngredient</span>
+                }
+            </div>
+        </div>
+
+        @if (ViewBag.RecommendedProducts != null && ViewBag.RecommendedProducts.Count > 0)
+        {
+            <h4 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 1px;">Curated For You</h4>
+            <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+                @foreach (var urun in ViewBag.RecommendedProducts)
+                {
+                    <div class="col">
+                        <div class="card h-100 sephora-card">
+                            <img src="@urun.ImageUrl" class="card-img-top mt-3" alt="@urun.Name" style="height:180px; object-fit:contain;">
+                            <div class="card-body text-center d-flex flex-column">
+                                <h6 class="card-title fw-bold text-uppercase mb-1" style="font-size: 0.9rem;">@urun.Name</h6>
+                                <p class="card-text text-muted mb-4">@urun.Price</p>
+
+                                <a href="@urun.PurchaseLink" target="_blank" class="btn sephora-btn w-100 mt-auto fw-bold" style="font-size: 0.8rem;">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function showLoading() {
+            var btn = document.getElementById("submitBtn");
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...';
+        }
+    </script>
+}

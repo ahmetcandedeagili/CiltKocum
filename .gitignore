@@ -1,0 +1,14 @@
+# --- PYTHON SECURITY & CACHE ---
+.env
+venv/
+__pycache__/
+*.pyc
+cilt_bakimi_vektor_db/
+skincare_vector_db/
+
+# --- C# & .NET ARTIFACTS ---
+bin/
+obj/
+appsettings.Development.json
+.vs/
+*.user
