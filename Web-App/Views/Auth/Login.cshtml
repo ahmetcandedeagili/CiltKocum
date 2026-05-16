@@ -1,0 +1,30 @@
+﻿@model CiltKocum.Web.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Sisteme Giriş";
+}
+
+<div class="container mt-5 fade-in-entry" style="max-width: 500px;">
+    <div class="card border-0 shadow-sm rounded-0">
+        <div class="card-body p-5 border">
+            <h3 class="text-center fw-bold text-uppercase mb-4" style="letter-spacing: 2px;">Sisteme Giriş</h3>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3 text-center"></div>
+
+            <form asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">E-Posta</label>
+                    <input asp-for="Email" type="email" class="form-control luxury-input-field" required />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Şifre</label>
+                    <input asp-for="Password" type="password" class="form-control luxury-input-field" required />
+                </div>
+
+                <button type="submit" class="btn action-gate-btn w-100 py-2">Giriş Yap</button>
+            </form>
+            <div class="text-center mt-3">
+                <a asp-action="Register" class="text-dark small text-decoration-none border-bottom border-dark">Hesabın yok mu? Kayıt Ol</a>
+            </div>
+        </div>
+    </div>
+</div>

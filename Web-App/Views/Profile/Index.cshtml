@@ -1,0 +1,41 @@
+﻿@using System.Linq
+@model IEnumerable<CiltKocum.Web.Models.AnalysisHistories>
+@{
+    ViewData["Title"] = "Profilim ve Analizlerim";
+}
+
+<div class="container mt-5 fade-in-entry">
+    <h2 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 2px;">Klinik Analiz Geçmişi</h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-light border rounded-0 text-center p-5">
+            <p class="text-muted mb-0">Henüz laboratuvarımızda bir analiz gerçekleştirmediniz.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn action-gate-btn mt-3">Yeni Analiz Başlat</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 mb-4">
+                    <div class="card border-0 shadow-sm rounded-0 border-start border-dark border-4">
+                        <div class="card-body p-4 bg-light">
+                            <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                <span class="fw-bold text-uppercase small" style="letter-spacing: 1px;">Hedef Molekül: @item.RecommendedIngredient</span>
+                                <span class="text-muted small">@item.AnalysisDate.ToString("dd MMM yyyy - HH:mm")</span>
+                            </div>
+
+                            <h6 class="text-muted text-uppercase fw-bold mb-1" style="font-size: 0.7rem;">Girdiğiniz Semptomlar</h6>
+                            <p class="fst-italic text-dark mb-3 small">"@item.UserQuestion"</p>
+
+                            <h6 class="fw-bold text-uppercase text-dark mb-1" style="font-size: 0.7rem;">Yapay Zeka Teşhisi</h6>
+                            <p class="text-dark small" style="white-space: pre-wrap;">@item.AiResponse</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

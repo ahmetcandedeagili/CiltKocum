@@ -1,52 +1,122 @@
-﻿@{
-    ViewData["Title"] = "AI Skincare Analysis";
+﻿@model CiltKocum.Web.Models.User
+@{
+    ViewData["Title"] = "AI Skincare Laboratory";
 }
 
 <style>
-    .sephora-btn {
-        background-color: #000;
-        color: #fff;
-        border: 1px solid #000;
-        border-radius: 0; /* Keskin köşeler lüks hissi verir */
-        text-transform: uppercase;
+    :root {
+        --sephora-pure-black: #000000;
+        --sephora-pure-white: #ffffff;
+        --sephora-gray-border: #e5e5e5;
+        --sephora-muted-gray: #7f7f7f;
+    }
+
+    .fade-in-entry {
+        animation: fadeInVibe 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @@keyframes fadeInVibe {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .sephora-workflow-ribbon {
+        background-color: var(--sephora-pure-black);
+        color: var(--sephora-pure-white);
         letter-spacing: 1px;
+        font-size: 0.8rem;
+    }
+
+    .workflow-step-box {
+        border-right: 1px solid #262626;
+        padding: 15px;
+    }
+
+        .workflow-step-box:last-child {
+            border-right: none;
+        }
+
+    .luxury-input-field {
+        border: 1px solid var(--sephora-gray-border);
+        border-radius: 0 !important;
+        font-size: 0.95rem;
+        transition: border-color 0.4s ease;
+    }
+
+        .luxury-input-field:focus {
+            border-color: var(--sephora-pure-black) !important;
+            box-shadow: none !important;
+        }
+
+    .action-gate-btn {
+        background-color: var(--sephora-pure-black);
+        color: var(--sephora-pure-white);
+        border: 1px solid var(--sephora-pure-black);
+        border-radius: 0 !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        font-weight: 700;
         transition: all 0.3s ease;
     }
 
-        .sephora-btn:hover {
-            background-color: #fff;
-            color: #000;
+        .action-gate-btn:hover {
+            background-color: var(--sephora-pure-white);
+            color: var(--sephora-pure-black);
         }
 
-    .sephora-card {
-        border: 1px solid #e0e0e0;
-        border-radius: 0;
-        transition: transform 0.2s ease;
+    .product-showcase-card {
+        border: 1px solid var(--sephora-gray-border);
+        border-radius: 0 !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-        .sephora-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        .product-showcase-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
         }
 </style>
 
-<div class="container mt-5" style="max-width: 850px;">
+<div class="w-100 sephora-workflow-ribbon py-2 text-uppercase mb-5 fade-in-entry">
+    <div class="container">
+        <div class="row text-center align-items-center">
+            <div class="col-md-4 workflow-step-box">
+                <span class="fw-bold me-2">01 /</span> Define Your Skin Concern
+            </div>
+            <div class="col-md-4 workflow-step-box">
+                <span class="fw-bold me-2">02 /</span> AI Diagnostics & RAG Search
+            </div>
+            <div class="col-md-4 workflow-step-box">
+                <span class="fw-bold me-2">03 /</span> Curated Sephora Formulations
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="container fade-in-entry" style="max-width: 850px;">
     <div class="text-center mb-5">
-        <h1 class="fw-bold text-dark" style="letter-spacing: 2px;">CİLT KOÇUM</h1>
-        <p class="text-muted mt-2" style="font-size: 1.1rem;">Describe your skin concern, and let our AI find the perfect ingredients for you.</p>
+        <h1 class="fw-bold text-dark" style="letter-spacing: 4px; font-size: 2.5rem;">CİLT KOÇUM</h1>
+        <div class="mx-auto my-3" style="width: 50px; height: 2px; background-color: #000;"></div>
+        <p class="text-muted text-uppercase" style="font-size: 0.75rem; letter-spacing: 2px;">Advanced AI Skin Analysis Laboratory</p>
     </div>
 
-    <div class="card sephora-card mb-5 shadow-sm">
-        <div class="card-body p-4 p-md-5">
+    <div class="card border-0 shadow-sm mb-5" style="border-radius: 0;">
+        <div class="card-body p-4 p-md-5 border">
             <form asp-controller="Home" asp-action="AskRoutine" method="post" onsubmit="showLoading()">
                 <div class="form-group mb-4">
-                    <label for="question" class="fw-bold mb-2 text-uppercase" style="font-size: 0.85rem;">Your Skin Profile</label>
-                    <textarea class="form-control rounded-0" id="question" name="question" rows="4"
-                              placeholder="e.g. My T-zone is very oily and I have blackheads on my nose..." required></textarea>
+                    <label for="question" class="fw-bold mb-3 text-uppercase text-dark" style="font-size: 0.8rem; letter-spacing: 1px;">Describe Current Symptoms or Target Anomalies</label>
+                    <textarea class="form-control luxury-input-field" id="question" name="question" rows="4"
+                              placeholder="Describe your skin conditions down to micro-details (e.g., localized sebum issues, continuous dark spots, structural acne clusters)..." required></textarea>
                 </div>
-                <button type="submit" id="submitBtn" class="btn sephora-btn w-100 fw-bold py-3 fs-6">
-                    Analyze My Skin
+                <button type="submit" id="submitBtn" class="btn action-gate-btn w-100 py-3">
+                    Initialize Molecular Diagnostics
                 </button>
             </form>
         </div>
@@ -54,48 +124,50 @@
 
     @if (ViewBag.Error != null)
     {
-        <div class="alert alert-dark rounded-0 border-0 bg-dark text-white text-center shadow-sm">
+        <div class="alert alert-dark rounded-0 border-0 bg-dark text-white text-center p-3 text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">
             @ViewBag.Error
         </div>
     }
 
     @if (ViewBag.AiAnswer != null)
     {
-        <div class="mb-5">
-            <h4 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 1px;">AI Consultation Result</h4>
+        <div class="mb-5 fade-in-entry">
+            <h4 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 1px; font-size: 1.1rem;">Clinical AI Assessment</h4>
+            <div class="bg-light p-4 p-md-5 border-start border-dark border-4">
+                <h6 class="text-muted text-uppercase fw-bold mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Injected Context Sample</h6>
+                <p class="fst-italic text-dark mb-4" style="font-size: 0.95rem;">"@ViewBag.UserQuestion"</p>
 
-            <div class="bg-light p-4 border-start border-dark border-4">
-                <h6 class="text-muted text-uppercase" style="font-size: 0.75rem;">Your Concern</h6>
-                <p class="fst-italic mb-4 text-dark">"@ViewBag.UserQuestion"</p>
-
-                <h6 class="fw-bold text-uppercase" style="font-size: 0.75rem;">Expert Advice</h6>
-                <p style="white-space: pre-wrap;" class="mb-3 text-dark">@ViewBag.AiAnswer</p>
+                <h6 class="fw-bold text-uppercase text-dark mb-2" style="font-size: 0.7rem; letter-spacing: 1px;">Formulated Therapeutic Summary</h6>
+                <p style="white-space: pre-wrap; font-size: 1rem; line-height: 1.6;" class="mb-4 text-dark">@ViewBag.AiAnswer</p>
 
                 @if (ViewBag.ActiveIngredient != null)
                 {
-                    <span class="badge bg-dark text-white rounded-0 px-3 py-2 mt-2">Recommended: @ViewBag.ActiveIngredient</span>
+                    <div class="mt-2">
+                        <span class="text-uppercase fw-bold text-white bg-dark px-3 py-2" style="font-size: 0.75rem; letter-spacing: 1px;">Target Molecule: @ViewBag.ActiveIngredient</span>
+                    </div>
                 }
             </div>
         </div>
 
         @if (ViewBag.RecommendedProducts != null && ViewBag.RecommendedProducts.Count > 0)
         {
-            <h4 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 1px;">Curated For You</h4>
-            <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-                @foreach (var urun in ViewBag.RecommendedProducts)
-                {
-                    <div class="col">
-                        <div class="card h-100 sephora-card">
-                            <img src="@urun.ImageUrl" class="card-img-top mt-3" alt="@urun.Name" style="height:180px; object-fit:contain;">
-                            <div class="card-body text-center d-flex flex-column">
-                                <h6 class="card-title fw-bold text-uppercase mb-1" style="font-size: 0.9rem;">@urun.Name</h6>
-                                <p class="card-text text-muted mb-4">@urun.Price</p>
-
-                                <a href="@urun.PurchaseLink" target="_blank" class="btn sephora-btn w-100 mt-auto fw-bold" style="font-size: 0.8rem;">Shop Now</a>
+            <div class="fade-in-entry mb-5">
+                <h4 class="fw-bold text-uppercase border-bottom border-dark pb-2 mb-4" style="letter-spacing: 1px; font-size: 1.1rem;">Verified Product Alignments</h4>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    @foreach (var urun in ViewBag.RecommendedProducts)
+                    {
+                        <div class="col">
+                            <div class="card h-100 product-showcase-card text-center d-flex flex-column p-3">
+                                <img src="@urun.ImageUrl" class="card-img-top mx-auto mt-2" alt="@urun.Name" style="height:150px; width: auto; object-fit:contain;">
+                                <div class="card-body d-flex flex-column px-2 pt-4">
+                                    <h6 class="fw-bold text-uppercase mb-1 text-dark" style="font-size: 0.85rem; letter-spacing: 0.5px; min-height: 40px;">@urun.Name</h6>
+                                    <p class="text-muted mb-4" style="font-size: 0.9rem; font-weight: 500;">@urun.Price</p>
+                                    <a href="@urun.PurchaseLink" target="_blank" class="btn action-gate-btn w-100 mt-auto py-2" style="font-size: 0.75rem;">Acquire Formula</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         }
     }
@@ -106,7 +178,9 @@
         function showLoading() {
             var btn = document.getElementById("submitBtn");
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...';
+            btn.className = "btn btn-light text-dark border w-100 py-3 text-uppercase fw-bold";
+            btn.style.letterSpacing = "2px";
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Parsing Skin Matrix...';
         }
     </script>
 }

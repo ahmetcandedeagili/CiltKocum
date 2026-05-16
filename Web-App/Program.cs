@@ -1,6 +1,7 @@
 using CiltKocum.Web.Data;
 using CiltKocum.Web.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // 2. Register our AI Service with HttpClient to talk with Python
 builder.Services.AddHttpClient<AiService>();
+
+// 3. Register Cookie Authentication Service Architecture
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login"; // Redirect target if unauthorized
+        options.ExpireTimeSpan = System.TimeSpan.FromDays(7); // Cookie persistence life
+    });
 
 var app = builder.Build();
 
@@ -66,6 +75,7 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

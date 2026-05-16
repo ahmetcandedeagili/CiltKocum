@@ -2,7 +2,9 @@ using CiltKocum.Web.Data;
 using CiltKocum.Web.Models;
 using CiltKocum.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
+using System.Security.Claims; // Kullanýcý ID'sini çekmek için gerekli
 
 namespace CiltKocum.Web.Controllers
 {
@@ -23,7 +25,7 @@ namespace CiltKocum.Web.Controllers
             return View();
         }
 
-        [HttpPost] // Removed the duplicate [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> AskRoutine(string question)
         {
             if (string.IsNullOrWhiteSpace(question))
@@ -35,18 +37,31 @@ namespace CiltKocum.Web.Controllers
             // 1. Get the DTO package from Python API (Contains Text, Ingredient, and Products)
             var aiResponseDto = await _aiService.AskCiltKocumAiAsync(question);
 
-            // 2. Pass the extracted data to the View using ViewBag
+            // 2. EÐER KULLANICI GÝRÝÞ YAPMIÞSA VERÝTABANINA KAYDET (YENÝ EKLENEN KISIM)
+            if (User.Identity.IsAuthenticated)
+            {
+                var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdString, out int userId))
+                {
+                    var analysisLog = new AnalysisHistories
+                    {
+                        UserId = userId,
+                        UserQuestion = question,
+                        AiResponse = aiResponseDto.ResponseText,
+                        RecommendedIngredient = aiResponseDto.ActiveIngredient,
+                        AnalysisDate = DateTime.Now
+                    };
+
+                    _context.AnalysisHistories.Add(analysisLog);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // 3. Pass the extracted data to the View using ViewBag
             ViewBag.UserQuestion = question;
-
-            // We specify .ResponseText because aiResponseDto is an object, not a string
             ViewBag.AiAnswer = aiResponseDto.ResponseText;
-
             ViewBag.ActiveIngredient = aiResponseDto.ActiveIngredient;
-
-            // We don't need C# DB matching anymore! Python already found the products for us.
             ViewBag.RecommendedProducts = aiResponseDto.LiveProducts;
-
-            // TODO for later: Save this interaction to AnalysisHistories table
 
             return View("Index");
         }

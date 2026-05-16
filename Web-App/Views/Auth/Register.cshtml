@@ -1,0 +1,44 @@
+﻿@model CiltKocum.Web.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Laboratuvara Katıl";
+}
+
+<div class="container mt-5 fade-in-entry" style="max-width: 500px;">
+    <div class="card border-0 shadow-sm rounded-0">
+        <div class="card-body p-5 border">
+            <h3 class="text-center fw-bold text-uppercase mb-4" style="letter-spacing: 2px;">Kayıt Ol</h3>
+
+            <form asp-action="Register" method="post">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Ad Soyad</label>
+                    <input asp-for="FullName" class="form-control luxury-input-field" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">E-Posta</label>
+                    <input asp-for="Email" type="email" class="form-control luxury-input-field" required />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Baskın Cilt Tipi</label>
+                    <select asp-for="SkinType" class="form-select luxury-input-field" required>
+                        <option value="">Seçiniz...</option>
+                        <option value="Kuru">Kuru</option>
+                        <option value="Yağlı">Yağlı</option>
+                        <option value="Karma">Karma</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Hassas">Hassas</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Şifre</label>
+                    <input asp-for="Password" type="password" class="form-control luxury-input-field" required />
+                </div>
+
+                <button type="submit" class="btn action-gate-btn w-100 py-2">Hesabı Oluştur</button>
+            </form>
+            <div class="text-center mt-3">
+                <a asp-action="Login" class="text-dark small text-decoration-none border-bottom border-dark">Zaten üye misin? Giriş Yap</a>
+            </div>
+        </div>
+    </div>
+</div>
